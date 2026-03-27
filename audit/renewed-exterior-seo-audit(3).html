@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO Audit Report — Renewed Exterior Systems</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #DC3545; --red-light: #FFF0F0; --red-border: #FFD0D0;
+    --amber: #D97706; --amber-light: #FFFBEB; --amber-border: #FDE68A;
+    --green: #059669; --green-light: #F0FDF4; --green-border: #BBF7D0;
+    --blue: #1D4ED8; --blue-light: #EFF6FF; --blue-border: #BFDBFE;
+    --slate: #1E293B; --slate-mid: #475569; --slate-light: #94A3B8;
+    --surface: #F8FAFC; --surface-2: #F1F5F9;
+    --border: #E2E8F0; --white: #FFFFFF;
+    --accent: #0F172A; --brand: #1E3A5F;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', -apple-system, sans-serif; background: var(--surface); color: var(--slate); line-height: 1.6; font-size: 14px; }
+
+  .cover { background: var(--brand); color: white; padding: 56px 48px 48px; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; top: -80px; right: -80px; width: 380px; height: 380px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.07); }
+  .cover::after { content: ''; position: absolute; bottom: -60px; left: -40px; width: 260px; height: 260px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.05); }
+  .cover-tag { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.5; margin-bottom: 20px; font-weight: 500; }
+  .cover h1 { font-size: 32px; font-weight: 600; line-height: 1.25; margin-bottom: 8px; position: relative; z-index: 1; }
+  .cover-url { font-family: 'DM Mono', monospace; font-size: 13px; opacity: 0.55; margin-bottom: 36px; }
+  .cover-meta { display: flex; gap: 32px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .cover-meta-item .label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.45; margin-bottom: 3px; }
+  .cover-meta-item .value { font-size: 15px; font-weight: 500; }
+
+  .score-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 20px 48px; display: flex; gap: 0; overflow-x: auto; }
+  .score-cell { flex: 1; min-width: 140px; padding: 0 20px; border-right: 1px solid var(--border); }
+  .score-cell:first-child { padding-left: 0; }
+  .score-cell:last-child { border-right: none; }
+  .score-cell .cat { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--slate-light); margin-bottom: 4px; font-weight: 500; }
+  .score-cell .score { font-size: 26px; font-weight: 600; line-height: 1; margin-bottom: 6px; }
+  .score-cell .track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .score-cell .fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+  .red .score { color: var(--red); } .red .fill { background: var(--red); }
+  .amber .score { color: var(--amber); } .amber .fill { background: var(--amber); }
+  .green .score { color: var(--green); } .green .fill { background: var(--green); }
+
+  .body-wrap { max-width: 880px; margin: 0 auto; padding: 40px 32px 72px; }
+
+  .stat-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 36px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 13px; color: var(--slate-mid); }
+  .chip .num { font-weight: 700; font-size: 15px; }
+  .chip-red .num { color: var(--red); }
+  .chip-amber .num { color: var(--amber); }
+  .chip-green .num { color: var(--green); }
+
+  .section { margin-bottom: 52px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1.5px solid var(--border); }
+  .s-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .s-icon-red { background: var(--red-light); }
+  .s-icon-blue { background: var(--blue-light); }
+  .s-title { font-size: 16px; font-weight: 600; color: var(--accent); }
+  .s-sub { font-size: 12px; color: var(--slate-light); margin-top: 1px; }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; cursor: pointer; user-select: none; }
+  .card-header:hover { background: var(--surface); }
+  .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
+  .b-crit { background: var(--red-light); color: var(--red); border: 1px solid var(--red-border); }
+  .b-high { background: var(--amber-light); color: var(--amber); border: 1px solid var(--amber-border); }
+  .b-med { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-border); }
+  .b-pass { background: var(--green-light); color: var(--green); border: 1px solid var(--green-border); }
+  .card-title { font-weight: 600; font-size: 14px; color: var(--accent); flex: 1; line-height: 1.4; }
+  .chevron { color: var(--slate-light); font-size: 11px; margin-top: 3px; transition: transform 0.2s; flex-shrink: 0; }
+  .card.open .chevron { transform: rotate(180deg); }
+  .card-body { display: none; padding: 14px 18px 18px; border-top: 1px solid var(--border); }
+  .card.open .card-body { display: block; }
+
+  .desc { font-size: 13.5px; color: var(--slate-mid); margin-bottom: 14px; line-height: 1.65; }
+  .fix { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .fix-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--slate-light); font-weight: 500; margin-bottom: 8px; }
+  .fix ul { list-style: none; padding: 0; }
+  .fix ul li { font-size: 13px; color: var(--slate-mid); padding: 4px 0 4px 18px; position: relative; line-height: 1.55; }
+  .fix ul li::before { content: '→'; position: absolute; left: 0; color: var(--green); font-weight: 600; }
+
+  code { font-family: 'DM Mono', monospace; background: var(--surface-2); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: var(--brand); }
+  .code-block { font-family: 'DM Mono', monospace; background: var(--accent); color: #A5F3FC; padding: 12px 16px; border-radius: 8px; font-size: 12px; line-height: 1.7; margin: 10px 0; overflow-x: auto; white-space: pre; }
+
+  .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .ba { border-radius: 8px; padding: 12px 14px; }
+  .ba .ba-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; margin-bottom: 6px; }
+  .ba-b { background: var(--red-light); border: 1px solid var(--red-border); }
+  .ba-b .ba-lbl { color: var(--red); }
+  .ba-a { background: var(--green-light); border: 1px solid var(--green-border); }
+  .ba-a .ba-lbl { color: var(--green); }
+  .ba-txt { font-size: 13px; color: var(--slate); line-height: 1.5; }
+
+  .city-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .city-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .city-card h4 { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); flex-shrink: 0; }
+  .city-list { list-style: none; padding: 0; }
+  .city-list li { font-size: 12.5px; color: var(--slate-mid); padding: 5px 0; border-bottom: 1px solid var(--surface-2); display: flex; gap: 8px; line-height: 1.5; }
+  .city-list li:last-child { border-bottom: none; }
+  .city-list li::before { content: '◆'; color: var(--brand); font-size: 8px; margin-top: 5px; flex-shrink: 0; }
+
+  /* ── Info Box ── */
+  .info-box {
+    background: linear-gradient(135deg, #EEF4FF 0%, #F8FAFF 100%);
+    border: 1px solid #C7D9F8;
+    border-left: 4px solid var(--brand);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .info-box-inner {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 24px;
+    align-items: start;
+  }
+  .info-box-content {}
+  .info-box-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brand);
+    opacity: 0.6;
+    margin-bottom: 6px;
+  }
+  .info-box-headline {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+  .info-box-body {
+    font-size: 13.5px;
+    color: var(--slate-mid);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .info-pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .pillar {
+    background: white;
+    border: 1px solid #D4E3FA;
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .pillar-icon {
+    font-size: 18px;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .pillar-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand);
+    margin-bottom: 4px;
+  }
+  .pillar-text {
+    font-size: 12px;
+    color: var(--slate-mid);
+    line-height: 1.5;
+  }
+  .timeline-strip {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 4px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tl-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate-light);
+    margin-right: 6px;
+  }
+  .tl-step {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: white;
+    border: 1px solid #C7D9F8;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11.5px;
+    color: var(--brand);
+    font-weight: 500;
+  }
+  .tl-step .tl-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand);
+    flex-shrink: 0;
+  }
+  .tl-step.tl-green { background: var(--green-light); border-color: var(--green-border); color: var(--green); }
+  .tl-step.tl-green .tl-dot { background: var(--green); }
+  .tl-step.tl-amber { background: var(--amber-light); border-color: var(--amber-border); color: var(--amber); }
+  .tl-step.tl-amber .tl-dot { background: var(--amber); }
+  .info-graphic {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-top: 4px;
+  }
+  .info-graphic svg {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+  }
+
+  @media (max-width: 700px) {
+    .info-box-inner { grid-template-columns: 1fr; }
+    .info-graphic { display: none; }
+    .info-pillars { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .cover { padding: 36px 24px 32px; }
+    .score-bar { padding: 16px 24px; }
+    .body-wrap { padding: 24px 16px 56px; }
+    .ba-grid, .city-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-tag">SEO Intelligence OS v4.0 — Site Audit Report</div>
+  <h1>Renewed Exterior Systems<br>SEO Audit</h1>
+  <div class="cover-url">renewedexteriorsystems.com</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="label">Location</div>
+      <div class="value">1616 Clemson Dr Unit A, Eagan MN 55122</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Target Cities</div>
+      <div class="value">Eagan · Apple Valley · Lakeville · Bloomington</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Audit Date</div>
+      <div class="value">March 2026</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Algorithm Context</div>
+      <div class="value">Post — March 2026 Core Update</div>
+    </div>
+  </div>
+</div>
+
+<div class="score-bar">
+  <div class="score-cell red">
+    <div class="cat">On-Page SEO</div>
+    <div class="score">32/100</div>
+    <div class="track"><div class="fill" data-w="32"></div></div>
+  </div>
+  <div class="score-cell red">
+    <div class="cat">Technical SEO</div>
+    <div class="score">38/100</div>
+    <div class="track"><div class="fill" data-w="38"></div></div>
+  </div>
+  <div class="score-cell amber">
+    <div class="cat">GBP Optimisation</div>
+    <div class="score">45/100</div>
+    <div class="track"><div class="fill" data-w="45"></div></div>
+  </div>
+  <div class="score-cell red">
+    <div class="cat">Local SEO</div>
+    <div class="score">28/100</div>
+    <div class="track"><div class="fill" data-w="28"></div></div>
+  </div>
+  <div class="score-cell green">
+    <div class="cat">Reviews</div>
+    <div class="score">82/100</div>
+    <div class="track"><div class="fill" data-w="82"></div></div>
+  </div>
+</div>
+
+<div class="body-wrap">
+
+  <div class="stat-chips">
+    <div class="chip chip-red"><span class="num">5s</span> Page load (target &lt;2.5s)</div>
+    <div class="chip chip-red"><span class="num">3.3 MB</span> Homepage weight (target &lt;1.4 MB)</div>
+    <div class="chip chip-red"><span class="num">34</span> Images missing alt text</div>
+    <div class="chip chip-amber"><span class="num">50</span> Google Reviews · 5.0★</div>
+    <div class="chip chip-red"><span class="num">0</span> Location landing pages</div>
+    <div class="chip chip-red"><span class="num">6</span> Service pages with identical H1</div>
+  </div>
+
+
+  <!-- ══════════════════ SECTION 1 — ON-PAGE ══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon s-icon-red">📝</div>
+      <div>
+        <div class="s-title">Section 1 — On-Page SEO</div>
+        <div class="s-sub">Homepage · Service Pages · Headings · Meta Data</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-box-inner">
+        <div class="info-box-content">
+          <div class="info-box-eyebrow">Intrycks Assessment</div>
+          <div class="info-box-headline">Your website is invisible to Google because it speaks in the wrong language</div>
+          <p class="info-box-body">Right now, when a homeowner in Eagan searches "roofing contractor near me," Google reads your website and struggles to understand what you do, who you serve, and where you operate. The homepage headline talks about "experiencing the difference" — but Google needs to see <em>roofing contractor Eagan MN</em>. Every service page says the same thing. Every heading misses an opportunity to rank. This is the most fundamental layer of SEO and the fastest to fix — no waiting for Google to crawl links or build authority. On-page changes can start showing ranking improvements within <strong>2–4 weeks</strong> of implementation.</p>
+          <div class="info-pillars">
+            <div class="pillar">
+              <span class="pillar-icon">🔍</span>
+              <div class="pillar-label">What's Wrong</div>
+              <div class="pillar-text">Google can't match your pages to the searches your customers are typing. H1s, H2s, and metas contain zero target keywords.</div>
+            </div>
+            <div class="pillar">
+              <span class="pillar-icon">🛠️</span>
+              <div class="pillar-label">How We Fix It</div>
+              <div class="pillar-text">Intrycks rewrites every heading, title tag, and meta description with precision keyword placement — one page at a time, in priority order.</div>
+            </div>
+            <div class="pillar">
+              <span class="pillar-icon">📈</span>
+              <div class="pillar-label">What to Expect</div>
+              <div class="pillar-text">Within 2–4 weeks Google re-crawls the updated pages. Impressions and click-through rates in Search Console begin rising first, then ranking positions follow.</div>
+            </div>
+          </div>
+          <div class="timeline-strip">
+            <span class="tl-label">Timeline</span>
+            <span class="tl-step"><span class="tl-dot"></span>Week 1 — H1s & meta rewrites</span>
+            <span class="tl-step tl-amber"><span class="tl-dot"></span>Week 2 — Heading structure fix</span>
+            <span class="tl-step tl-green"><span class="tl-dot"></span>Week 3–4 — Ranking movement begins</span>
+          </div>
+        </div>
+        <div class="info-graphic">
+          <svg viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Browser frame -->
+            <rect x="10" y="10" width="180" height="130" rx="10" fill="white" stroke="#C7D9F8" stroke-width="1.5"/>
+            <rect x="10" y="10" width="180" height="28" rx="10" fill="#EEF4FF" stroke="#C7D9F8" stroke-width="1.5"/>
+            <circle cx="26" cy="24" r="4" fill="#FFD0D0"/>
+            <circle cx="40" cy="24" r="4" fill="#FDE68A"/>
+            <circle cx="54" cy="24" r="4" fill="#BBF7D0"/>
+            <rect x="66" y="17" width="98" height="14" rx="7" fill="white" stroke="#C7D9F8" stroke-width="1"/>
+            <!-- Bad H1 (crossed out) -->
+            <rect x="22" y="48" width="156" height="10" rx="3" fill="#FFD0D0"/>
+            <line x1="22" y1="53" x2="178" y2="53" stroke="#DC3545" stroke-width="1.5"/>
+            <text x="24" y="57" font-family="sans-serif" font-size="7" fill="#DC3545" opacity="0.7">Experience The Difference...</text>
+            <!-- Good H1 -->
+            <rect x="22" y="66" width="156" height="12" rx="3" fill="#D1FAE5"/>
+            <text x="24" y="76" font-family="sans-serif" font-size="7.5" fill="#065F46" font-weight="600">Roofing Contractor Eagan MN</text>
+            <!-- Meta lines -->
+            <rect x="22" y="86" width="120" height="6" rx="3" fill="#EEF4FF"/>
+            <rect x="22" y="96" width="140" height="6" rx="3" fill="#EEF4FF"/>
+            <rect x="22" y="106" width="90" height="6" rx="3" fill="#EEF4FF"/>
+            <!-- H2 chips -->
+            <rect x="22" y="120" width="46" height="12" rx="3" fill="#DBEAFE"/>
+            <text x="24" y="130" font-family="sans-serif" font-size="6.5" fill="#1E3A5F" font-weight="600">Roofing</text>
+            <rect x="74" y="120" width="46" height="12" rx="3" fill="#DBEAFE"/>
+            <text x="76" y="130" font-family="sans-serif" font-size="6.5" fill="#1E3A5F" font-weight="600">Siding</text>
+            <rect x="126" y="120" width="46" height="12" rx="3" fill="#DBEAFE"/>
+            <text x="128" y="130" font-family="sans-serif" font-size="6.5" fill="#1E3A5F" font-weight="600">Gutters</text>
+            <!-- Arrow up with label -->
+            <path d="M100 155 L100 145" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+            <path d="M95 150 L100 145 L105 150" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="60" y="158" width="80" height="18" rx="9" fill="#D1FAE5" stroke="#BBF7D0"/>
+            <text x="100" y="171" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#065F46" font-weight="600">Rankings improve</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c1">
+      <div class="card-header" onclick="tog('c1')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">Hero section overloaded with video + form — causing 5-second load time</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">The homepage hero contains a <strong>full autoplay video</strong> and an <strong>embedded contact form</strong> above the fold. Google's Core Web Vitals require LCP (Largest Contentful Paint) under 2.5 seconds. The current homepage loads in approximately 5 seconds and weighs 3.3 MB. This directly suppresses local pack rankings — the March 2026 core update specifically tightened the link between page speed and local visibility.</p>
+        <div class="fix">
+          <div class="fix-lbl">Recommended Improvements</div>
+          <ul>
+            <li>Replace the video in the hero with a single compressed <strong>WebP background image</strong> under 120 KB. This alone cuts LCP by 60–70%.</li>
+            <li>Move the video below the hero — after the first visible content block. Use the <code>loading="lazy"</code> attribute on the video element.</li>
+            <li>Remove the contact form from the hero. Relocate it below the services section or above the reviews block.</li>
+            <li>The hero should contain only: H1 headline → one supporting line → one CTA button. Nothing else.</li>
+            <li>Target homepage weight after all fixes: <strong>under 1.4 MB</strong> (currently 3.3 MB).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c2">
+      <div class="card-header" onclick="tog('c2')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">Homepage H1 contains zero keywords — Google cannot classify this page</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">The H1 currently reads: <em>"Experience The Difference with Renewed Exterior Systems."</em> This is a brand tagline — not a keyword signal. The H1 is the most important on-page indicator of what a page is about. Without a primary keyword here, Google has no clear signal for "roofing contractor Eagan MN" or "siding contractor Twin Cities."</p>
+        <div class="ba-grid">
+          <div class="ba ba-b"><div class="ba-lbl">❌ Current H1</div><div class="ba-txt">"Experience The Difference with Renewed Exterior Systems"</div></div>
+          <div class="ba ba-a"><div class="ba-lbl">✅ Recommended H1</div><div class="ba-txt">"Roofing & Siding Contractor in Eagan, MN — Free Estimates, 5-Star Rated"</div></div>
+        </div>
+        <div class="fix" style="margin-top:12px">
+          <div class="fix-lbl">Recommended Improvements</div>
+          <ul>
+            <li>H1 must include the primary keyword: <code>Roofing Contractor Eagan MN</code> or <code>Roofing & Siding Contractor</code></li>
+            <li>Include a trust trigger: "Free Estimates", "5-Star Rated", or "Licensed & Insured"</li>
+            <li>Keep it readable — write for users first. The keyword placement is what changes, not the tone.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c3">
+      <div class="card-header" onclick="tog('c3')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">All 6 service pages share the same H1 — Google treats them as duplicate pages</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">Every service page — Roofing, Siding, Gutters, Windows, Doors, Decks — currently uses the H1: <em>"Proudly Serving the Twin Cities One Home at a Time."</em> This heading describes the company, not the service. From Google's perspective all six pages look identical, which prevents any of them from ranking for their specific target keyword.</p>
+        <div class="fix">
+          <div class="fix-lbl">Recommended H1 per service page</div>
+          <ul>
+            <li><strong>Roofing:</strong> "Roof Replacement & Repair Contractor in Eagan, MN — Free Estimates"</li>
+            <li><strong>Siding:</strong> "Siding Installation & Repair in the Twin Cities — Eagan, MN"</li>
+            <li><strong>Gutters:</strong> "Seamless Gutter Installation & Replacement in Eagan, MN"</li>
+            <li><strong>Windows:</strong> "Window Replacement & Installation — Eagan & South Metro MN"</li>
+            <li><strong>Doors:</strong> "Exterior Door Installation & Replacement in Eagan, MN"</li>
+            <li><strong>Decks:</strong> "Custom Deck Design & Construction in Eagan, MN"</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c4">
+      <div class="card-header" onclick="tog('c4')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">All meta titles and descriptions are unoptimised across the entire site</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">Meta titles and descriptions control what appears in Google search results. Unoptimised metas either get auto-generated by Google at low quality, or display generic text that fails to earn a click. Every page needs a unique, keyword-rich, action-oriented meta title and description.</p>
+        <div class="fix">
+          <div class="fix-lbl">Recommended examples and formula</div>
+          <ul>
+            <li><strong>Homepage title:</strong> <code>Roofing & Siding Contractor Eagan MN | Renewed Exterior Systems</code> (59 chars)</li>
+            <li><strong>Homepage meta:</strong> "Licensed roofing, siding, gutters & more for Eagan, Apple Valley, Lakeville & Bloomington. 50+ 5-star reviews. Free estimates. Call (612) 807-2975."</li>
+            <li><strong>Roofing page title:</strong> <code>Roof Replacement & Repair Eagan MN | Renewed Exterior Systems</code></li>
+            <li><strong>Siding page title:</strong> <code>Siding Installation Eagan MN | Twin Cities Siding Contractor</code></li>
+            <li>Formula: [Primary keyword + City] | [Brand or trust signal] — under 60 chars for title, under 155 for description</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c5">
+      <div class="card-header" onclick="tog('c5')">
+        <span class="badge b-high">🟡 High Priority</span>
+        <div class="card-title">Service names in H4 tags — need to be promoted to H2 for proper SEO weight</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">The services listed on the homepage (Roofing, Siding, Gutters, Windows, Doors, Decks) are wrapped in H4 tags. Google assigns progressively less weight from H1 through H6. H4 carries minimal ranking signal. These service names are primary keywords and need to be in H2 tags so Google understands they are the core topics of the page.</p>
+        <div class="fix">
+          <div class="fix-lbl">Recommended Improvements</div>
+          <ul>
+            <li>Change all service name headings from <code>&lt;h4&gt;</code> to <code>&lt;h2&gt;</code></li>
+            <li>Expand the service names to be keyword-rich: <code>&lt;h2&gt;Roofing Installation & Repair&lt;/h2&gt;</code> instead of just "Roofing"</li>
+            <li>Add a 2–3 sentence description under each H2 that includes the city name and a benefit</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c6">
+      <div class="card-header" onclick="tog('c6')">
+        <span class="badge b-high">🟡 High Priority</span>
+        <div class="card-title">Overall heading structure lacks keyword placement — applies across all pages</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">Beyond the H1 issue, the heading structure throughout the homepage and service pages uses generic phrases with no keyword placement at the H2 or H3 level. H2s and H3s are section navigation signals — they should describe the content of each section using relevant keywords, not placeholder phrases like "Why Choose Us" or "Get Started."</p>
+        <div class="fix">
+          <div class="fix-lbl">Heading rewrite examples</div>
+          <ul>
+            <li>"Why Choose Us" → "Why Eagan & South Metro Homeowners Trust Renewed Exterior Systems"</li>
+            <li>"Our Process" → "How Our Roofing & Siding Process Works"</li>
+            <li>"Contact Us" → "Get Your Free Roofing or Siding Estimate in Eagan, MN"</li>
+            <li>Question-format H2/H3s also capture Google's "People Also Ask" box: e.g. "How Much Does a Roof Replacement Cost in Minnesota?"</li>
+            <li>Apply consistent keyword placement — not forced stuffing — across all page headings</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c7">
+      <div class="card-header" onclick="tog('c7')">
+        <span class="badge b-high">🟡 High Priority</span>
+        <div class="card-title">Homepage links pointing to redirect URLs instead of final destination pages</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">Several internal links on the homepage point to URLs that redirect to other pages rather than linking directly to the final destination. Each redirect wastes link equity that should flow to the target page, and adds a small but measurable load time cost.</p>
+        <div class="fix">
+          <div class="fix-lbl">Recommended Improvements</div>
+          <ul>
+            <li>Crawl the site with Screaming Frog (free up to 500 URLs) or Google Search Console to identify all 3xx redirect responses on internal links</li>
+            <li>For each redirect link, update the <code>href</code> attribute to point directly to the final destination URL — bypassing the redirect entirely</li>
+            <li>This is a 30–60 minute fix once the redirect URLs are identified</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════ SECTION 2 — TECHNICAL ══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon s-icon-red">⚙️</div>
+      <div>
+        <div class="s-title">Section 2 — Technical SEO</div>
+        <div class="s-sub">Speed · Code Optimisation · Images · Crawl</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-box-inner">
+        <div class="info-box-content">
+          <div class="info-box-eyebrow">Intrycks Assessment</div>
+          <div class="info-box-headline">Your website is slow, heavy, and sending wrong signals to Google's crawler</div>
+          <p class="info-box-body">At 3.3 MB and a 5-second load time, your homepage is failing Google's Core Web Vitals — a direct ranking factor since 2021, and one that became significantly more important after the March 2026 Core Update. Think of it this way: Google is like a delivery driver with limited time in your neighbourhood. If your door takes 5 seconds to open, they move on to the next house. Meanwhile, competitors with fast, clean websites are getting crawled more frequently and indexed more thoroughly. The technical fixes here are largely <strong>one-time implementation tasks</strong> — once done, they compound in benefit indefinitely. A developer can complete most of these within <strong>1–2 weeks</strong>.</p>
+          <div class="info-pillars">
+            <div class="pillar">
+              <span class="pillar-icon">🐢</span>
+              <div class="pillar-label">What's Wrong</div>
+              <div class="pillar-text">A 3.3 MB homepage with render-blocking JS, uncompressed images, and unused CSS is loading twice as slowly as Google's threshold. Every second of delay costs rankings and leads.</div>
+            </div>
+            <div class="pillar">
+              <span class="pillar-icon">⚡</span>
+              <div class="pillar-label">How We Fix It</div>
+              <div class="pillar-text">Intrycks implements JS and CSS minification, converts all images to WebP, defers non-critical scripts, and fixes the hero section. Target: sub-1.4 MB, sub-2.5s load.</div>
+            </div>
+            <div class="pillar">
+              <span class="pillar-icon">🚀</span>
+              <div class="pillar-label">What to Expect</div>
+              <div class="pillar-text">PageSpeed score improves from failing to 80+. Google crawls more pages per visit. Local pack rankings respond to speed improvements within 3–6 weeks of the fix going live.</div>
+            </div>
+          </div>
+          <div class="timeline-strip">
+            <span class="tl-label">Timeline</span>
+            <span class="tl-step"><span class="tl-dot"></span>Week 1 — Image compression & WebP</span>
+            <span class="tl-step tl-amber"><span class="tl-dot"></span>Week 1–2 — JS/CSS minification</span>
+            <span class="tl-step tl-green"><span class="tl-dot"></span>Week 3–6 — Ranking lift from speed</span>
+          </div>
+        </div>
+        <div class="info-graphic">
+          <svg viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Speedometer arc -->
+            <path d="M40 140 A60 60 0 0 1 160 140" stroke="#E2E8F0" stroke-width="14" stroke-linecap="round" fill="none"/>
+            <!-- Red zone (slow) -->
+            <path d="M40 140 A60 60 0 0 1 80 88" stroke="#DC3545" stroke-width="14" stroke-linecap="round" fill="none" opacity="0.7"/>
+            <!-- Green zone (target) -->
+            <path d="M120 88 A60 60 0 0 1 160 140" stroke="#059669" stroke-width="14" stroke-linecap="round" fill="none" opacity="0.4"/>
+            <!-- Current needle (pointing red zone) -->
+            <line x1="100" y1="140" x2="58" y2="100" stroke="#DC3545" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="100" cy="140" r="7" fill="white" stroke="#DC3545" stroke-width="2"/>
+            <circle cx="100" cy="140" r="3" fill="#DC3545"/>
+            <!-- Labels -->
+            <text x="30" y="158" font-family="sans-serif" font-size="8" fill="#DC3545" font-weight="600">5s</text>
+            <text x="88" y="72" font-family="sans-serif" font-size="8" fill="#94A3B8">2.5s</text>
+            <text x="152" y="158" font-family="sans-serif" font-size="8" fill="#059669" font-weight="600">&lt;1s</text>
+            <!-- Current label -->
+            <rect x="60" y="158" width="80" height="18" rx="9" fill="#FFF0F0" stroke="#FFD0D0"/>
+            <text x="100" y="171" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#DC3545" font-weight="600">Currently: 5 seconds</text>
+            <!-- Target label -->
+            <rect x="62" y="182" width="76" height="16" rx="8" fill="#D1FAE5" stroke="#BBF7D0"/>
+            <text x="100" y="194" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#065F46" font-weight="600">Target: under 2.5s</text>
+            <!-- File size bar -->
+            <rect x="22" y="28" width="156" height="10" rx="5" fill="#E2E8F0"/>
+            <rect x="22" y="28" width="156" height="10" rx="5" fill="#DC3545" opacity="0.6"/>
+            <text x="24" y="37" font-family="sans-serif" font-size="7" fill="white" font-weight="600">3.3 MB — current</text>
+            <rect x="22" y="44" width="66" height="10" rx="5" fill="#D1FAE5" stroke="#BBF7D0"/>
+            <text x="24" y="53" font-family="sans-serif" font-size="7" fill="#065F46" font-weight="600">1.4 MB — target</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c8">
+      <div class="card-header" onclick="tog('c8')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">JavaScript bloat — needs minification and lazy loading to cut page weight</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">The homepage loads a large JavaScript payload upfront — including code only needed when the user scrolls further down the page. This render-blocking JS delays how quickly Google and users see content, and is a direct contributor to the 5-second load time.</p>
+        <div class="fix">
+          <div class="fix-lbl">Three-step JS fix</div>
+          <ul>
+            <li><strong>Minify all JS files:</strong> Use WP Rocket, NitroPack, or LiteSpeed Cache — this is typically a one-click setting.</li>
+            <li><strong>Defer non-critical JS:</strong> Add the <code>defer</code> or <code>async</code> attribute to scripts not needed for the initial render — Google Maps, chat widgets, form validation, and third-party analytics scripts can all be deferred.</li>
+            <li><strong>Remove unused JS:</strong> Open Chrome DevTools → Coverage tab → identify JS files that are downloaded but less than 20% executed on that page. Remove or consolidate these files.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c9">
+      <div class="card-header" onclick="tog('c9')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">CSS unoptimised — unused CSS adding unnecessary load weight to every page</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">The site loads CSS stylesheets containing rules for elements that don't exist on every page. This "unused CSS" adds weight to every page load with no visual benefit. Minifying and stripping unused CSS is a standard performance improvement.</p>
+        <div class="fix">
+          <div class="fix-lbl">Recommended Improvements</div>
+          <ul>
+            <li><strong>CSS minification:</strong> Enable via your caching plugin — WP Rocket, W3 Total Cache, and LiteSpeed Cache all include this as a setting.</li>
+            <li><strong>Remove unused CSS:</strong> Use PurgeCSS or WP Rocket's "Remove Unused CSS" feature to strip styles not referenced on each specific page.</li>
+            <li><strong>Critical CSS inlining:</strong> Extract only the CSS needed for above-the-fold content and inline it in the <code>&lt;head&gt;</code>. Load the remaining CSS asynchronously so it doesn't block rendering.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c10">
+      <div class="card-header" onclick="tog('c10')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">34 images missing alt text — invisible to Google and accessibility non-compliant</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">34 images across the site have no <code>alt</code> attribute. Alt text tells Google what an image shows — reinforcing the page's topical relevance and enabling ranking in Google Image Search. It is also required for web accessibility compliance. For a contractor site, every project photo is an opportunity to reinforce keywords like "roofing Eagan MN" or "siding installation Apple Valley MN."</p>
+        <div class="fix">
+          <div class="fix-lbl">Alt text formula for contractor project photos</div>
+          <ul>
+            <li>Roofing jobs: <code>alt="Roof replacement completed in Eagan MN — asphalt shingle installation by Renewed Exterior Systems"</code></li>
+            <li>Siding jobs: <code>alt="James Hardie siding installation in Apple Valley MN"</code></li>
+            <li>Team: <code>alt="Renewed Exterior Systems roofing crew at work in Eagan Minnesota"</code></li>
+            <li>Logo: <code>alt="Renewed Exterior Systems logo — Eagan MN roofing and siding contractor"</code></li>
+            <li>Keep alt text natural and descriptive — do not keyword-stuff</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c11">
+      <div class="card-header" onclick="tog('c11')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">Image file sizes too large — compress all images and convert to WebP format</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">Oversized, uncompressed images are a major contributor to the 3.3 MB homepage weight and the 5-second load time. WebP delivers the same visual quality at 40–60% smaller file sizes compared to JPG or PNG, and is natively supported by all major browsers. Google PageSpeed Insights flags uncompressed images as a direct ranking factor.</p>
+        <div class="fix">
+          <div class="fix-lbl">Image optimisation steps</div>
+          <ul>
+            <li><strong>Convert to WebP.</strong> On WordPress: install "WebP Express" or "Imagify" — these convert images automatically on upload and serve WebP to supported browsers.</li>
+            <li><strong>Resize to actual display size.</strong> If an image displays at 800px wide on the page, the file should be 800px wide — not 2400px as exported from a camera or phone.</li>
+            <li><strong>Compress before uploading.</strong> Use TinyPNG, Squoosh, or Imagify. Target sizes: hero image &lt;150 KB, project photos &lt;80 KB each.</li>
+            <li>Add <code>loading="lazy"</code> to all images below the fold — they load only when the user scrolls to them.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c12">
+      <div class="card-header" onclick="tog('c12')">
+        <span class="badge b-high">🟡 High Priority</span>
+        <div class="card-title">Multiple meta descriptions on the same pages — Google ignores all of them</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">Multiple <code>&lt;meta name="description"&gt;</code> tags are present on the same pages. When Google detects duplicate meta tags it ignores all of them and auto-generates its own snippet from page content — which is typically lower quality and less likely to earn a click. Each page must have exactly one unique meta description.</p>
+        <div class="fix">
+          <div class="fix-lbl">Recommended Improvements</div>
+          <ul>
+            <li>The most common cause on WordPress: both the theme and an SEO plugin (Yoast, RankMath) are outputting meta descriptions simultaneously.</li>
+            <li>Fix: disable meta description output in the theme settings — let the SEO plugin control it exclusively.</li>
+            <li>Verify the fix: view-source on each page and search for <code>name="description"</code> — it should appear exactly once per page.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c13">
+      <div class="card-header" onclick="tog('c13')">
+        <span class="badge b-high">🟡 High Priority</span>
+        <div class="card-title">Robots.txt is too basic — needs configuration to improve crawl efficiency</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">The current <code>robots.txt</code> file is minimal. A well-configured robots.txt tells Google's crawler which pages to spend time on and which to skip — improving crawl efficiency so the most important pages (service pages, location pages, blog) get crawled and indexed faster.</p>
+        <div class="fix">
+          <div class="fix-lbl">Recommended robots.txt (WordPress contractor site)</div>
+          <div class="code-block">User-agent: *
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /?s=
+Disallow: /search/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /*?replytocom=
+Allow: /wp-admin/admin-ajax.php
+
+Sitemap: https://renewedexteriorsystems.com/sitemap.xml</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c14">
+      <div class="card-header" onclick="tog('c14')">
+        <span class="badge b-pass">✅ Pass</span>
+        <div class="card-title">XML Sitemap is present — maintain and update as new pages are added</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">The XML sitemap is present and functional — this is a pass. As new location pages and blog content are published over the coming months, the sitemap must auto-update to include them. Also confirm the sitemap is submitted inside Google Search Console.</p>
+        <div class="fix">
+          <div class="fix-lbl">Maintenance actions</div>
+          <ul>
+            <li>Confirm sitemap URL is submitted in Google Search Console → Sitemaps section</li>
+            <li>Ensure your SEO plugin (Yoast / RankMath) is set to auto-update the sitemap when new pages are published</li>
+            <li>After each new location page is published, use GSC → URL Inspection → Request Indexing to prompt faster crawling</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════ SECTION 3 — GBP + LOCAL ══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="s-icon s-icon-blue">📍</div>
+      <div>
+        <div class="s-title">Section 3 — Google Business Profile & Local SEO</div>
+        <div class="s-sub">Location Pages · GBP Optimisation · Service Area Configuration</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-box-inner">
+        <div class="info-box-content">
+          <div class="info-box-eyebrow">Intrycks Assessment</div>
+          <div class="info-box-headline">You're only competing in 1 of 4 target cities — and even Eagan isn't fully optimised</div>
+          <p class="info-box-body">When a homeowner in Apple Valley searches "roofing contractor near me," Google's map pack shows three local businesses. Right now, Renewed Exterior Systems is almost certainly not one of them — because there are no location landing pages, the GBP service area doesn't include those cities, and the website never mentions them. The map pack is the most valuable real estate in local search: the top 3 businesses receive <strong>over 126% more traffic</strong> than organic results below them. This section is about claiming that territory across all four cities — Eagan, Apple Valley, Lakeville, and Bloomington. GBP fixes show results fastest (2–4 weeks). Location pages take 6–10 weeks to gain full traction as Google indexes and evaluates them.</p>
+          <div class="info-pillars">
+            <div class="pillar">
+              <span class="pillar-icon">📍</span>
+              <div class="pillar-label">What's Wrong</div>
+              <div class="pillar-text">No location pages exist for 3 of 4 target cities. GBP likely has wrong primary category, missing service area cities, and unoptimised descriptions.</div>
+            </div>
+            <div class="pillar">
+              <span class="pillar-icon">🗺️</span>
+              <div class="pillar-label">How We Fix It</div>
+              <div class="pillar-text">Intrycks builds 4 geo-targeted landing pages, configures GBP service areas, optimises the primary category and services, and adds "Areas We Serve" across the site.</div>
+            </div>
+            <div class="pillar">
+              <span class="pillar-icon">🏆</span>
+              <div class="pillar-label">What to Expect</div>
+              <div class="pillar-text">GBP fixes show results in 2–4 weeks. Location pages take 6–10 weeks to rank. Realistic goal: top-3 map pack in Eagan by week 6, Apple Valley by week 10.</div>
+            </div>
+          </div>
+          <div class="timeline-strip">
+            <span class="tl-label">Timeline</span>
+            <span class="tl-step"><span class="tl-dot"></span>Week 1 — GBP category & service area</span>
+            <span class="tl-step tl-amber"><span class="tl-dot"></span>Week 2–4 — Location pages built</span>
+            <span class="tl-step tl-green"><span class="tl-dot"></span>Week 6–10 — Map pack visibility</span>
+          </div>
+        </div>
+        <div class="info-graphic">
+          <svg viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Map background -->
+            <rect x="10" y="10" width="180" height="140" rx="10" fill="#EEF4FF" stroke="#C7D9F8" stroke-width="1.5"/>
+            <!-- Map road lines -->
+            <path d="M10 75 Q60 70 100 80 Q140 90 190 75" stroke="#C7D9F8" stroke-width="3" fill="none"/>
+            <path d="M80 10 Q85 55 80 80 Q75 105 80 140" stroke="#C7D9F8" stroke-width="3" fill="none"/>
+            <!-- Eagan pin (primary - orange) -->
+            <circle cx="82" cy="88" r="14" fill="#1E3A5F" opacity="0.15"/>
+            <path d="M82 70 C77 70 72 74 72 80 C72 88 82 98 82 98 C82 98 92 88 92 80 C92 74 87 70 82 70Z" fill="#1E3A5F"/>
+            <circle cx="82" cy="80" r="4" fill="white"/>
+            <text x="82" y="108" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#1E3A5F" font-weight="700">Eagan ✓</text>
+            <!-- Apple Valley pin (grey - missing) -->
+            <path d="M118 108 C114 108 110 111 110 116 C110 122 118 130 118 130 C118 130 126 122 126 116 C126 111 122 108 118 108Z" fill="#94A3B8" opacity="0.5"/>
+            <circle cx="118" cy="116" r="3" fill="white" opacity="0.7"/>
+            <text x="118" y="138" text-anchor="middle" font-family="sans-serif" font-size="6.5" fill="#94A3B8">Apple Valley</text>
+            <!-- Bloomington pin (grey - missing) -->
+            <path d="M52 52 C49 52 46 55 46 59 C46 64 52 70 52 70 C52 70 58 64 58 59 C58 55 55 52 52 52Z" fill="#94A3B8" opacity="0.5"/>
+            <circle cx="52" cy="59" r="3" fill="white" opacity="0.7"/>
+            <text x="52" y="78" text-anchor="middle" font-family="sans-serif" font-size="6.5" fill="#94A3B8">Bloomington</text>
+            <!-- Lakeville pin (grey - missing) -->
+            <path d="M138 130 C135 130 132 133 132 137 C132 142 138 148 138 148 C138 148 144 142 144 137 C144 133 141 130 138 130Z" fill="#94A3B8" opacity="0.5"/>
+            <circle cx="138" cy="137" r="3" fill="white" opacity="0.7"/>
+            <!-- Legend -->
+            <rect x="12" y="152" width="176" height="36" rx="6" fill="white" stroke="#C7D9F8"/>
+            <circle cx="28" cy="162" r="5" fill="#1E3A5F"/>
+            <text x="37" y="166" font-family="sans-serif" font-size="7" fill="#1E3A5F" font-weight="600">Active city</text>
+            <circle cx="28" cy="178" r="5" fill="#94A3B8" opacity="0.5"/>
+            <text x="37" y="182" font-family="sans-serif" font-size="7" fill="#94A3B8">Not ranking — pages needed</text>
+            <!-- Service area dashed ring around Eagan -->
+            <circle cx="82" cy="88" r="30" stroke="#1E3A5F" stroke-width="1" stroke-dasharray="4 3" fill="none" opacity="0.3"/>
+            <!-- Status boxes at bottom -->
+            <rect x="95" y="152" width="90" height="16" rx="4" fill="#FFF0F0" stroke="#FFD0D0"/>
+            <text x="140" y="164" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#DC3545" font-weight="600">3 cities unranked</text>
+            <rect x="95" y="172" width="90" height="16" rx="4" fill="#D1FAE5" stroke="#BBF7D0"/>
+            <text x="140" y="184" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#065F46" font-weight="600">Target: all 4 cities</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c15">
+      <div class="card-header" onclick="tog('c15')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">Zero location landing pages — blocking map pack visibility in 3 of 4 target cities</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">The business is physically located in Eagan — Google's proximity signal provides a natural ranking advantage for Eagan searches. For Apple Valley, Lakeville, and Bloomington, dedicated location landing pages are the primary lever available. Without these pages, Google has no on-site evidence to support the service area claim for those cities. These must be genuine, locally-specific content assets — not thin pages that just mention the city name.</p>
+        <div class="fix">
+          <div class="fix-lbl">Required content on each location page</div>
+          <ul>
+            <li><strong>Unique H1:</strong> "Roofing & Siding Contractor in [City], MN — Free Estimates"</li>
+            <li><strong>City-specific intro:</strong> Discuss the city's neighbourhoods, housing types, and local weather challenges — Minnesota hail season (April–August), winter ice dams, storm damage</li>
+            <li><strong>Famous local landmarks and areas</strong> to establish genuine local relevance for that page</li>
+            <li><strong>Services section</strong> with internal links to each full service page</li>
+            <li><strong>Local credibility:</strong> Reference a completed project or customer review from that specific city</li>
+            <li><strong>FAQ section</strong> targeting "Do you serve [City]?" and related questions with FAQ schema markup</li>
+            <li><strong>Embedded Google Map</strong> showing the service area from Eagan to that city</li>
+            <li><strong>CTA:</strong> "Get Your Free Estimate in [City]" linking to the booking page</li>
+            <li>Target word count: 600–900 words — quality and specificity over length</li>
+          </ul>
+        </div>
+        <div class="city-grid">
+          <div class="city-card">
+            <h4><span class="dot"></span>Apple Valley, MN</h4>
+            <ul class="city-list">
+              <li>URL: <code>/service-area/apple-valley-mn/</code></li>
+              <li>6 miles south of Eagan — strong proximity claim</li>
+              <li>Competitor Apex Roofing has physical location here — most important city to target after Eagan</li>
+            </ul>
+          </div>
+          <div class="city-card">
+            <h4><span class="dot"></span>Lakeville, MN</h4>
+            <ul class="city-list">
+              <li>URL: <code>/service-area/lakeville-mn/</code></li>
+              <li>12 miles south — requires deepest content investment</li>
+              <li>Angle: storm damage and hail insurance claims content</li>
+            </ul>
+          </div>
+          <div class="city-card">
+            <h4><span class="dot"></span>Bloomington, MN</h4>
+            <ul class="city-list">
+              <li>URL: <code>/service-area/bloomington-mn/</code></li>
+              <li>8 miles north — solid service area claim</li>
+              <li>Angle: modern materials and faster turnaround vs legacy competitors</li>
+            </ul>
+          </div>
+          <div class="city-card">
+            <h4><span class="dot"></span>Eagan, MN</h4>
+            <ul class="city-list">
+              <li>Reinforce homepage or create <code>/service-area/eagan-mn/</code></li>
+              <li>Physical address — strongest proximity ranking position</li>
+              <li>Add ZIP codes (55121, 55122, 55123) and neighbourhood names</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c16">
+      <div class="card-header" onclick="tog('c16')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">GBP primary category, services list, and descriptions need full audit and optimisation</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">The GBP primary category is the #1 ranking factor for local map pack placement according to the 2026 Local Search Ranking Factors survey. If it is not set to "Roofing Contractor" — the highest-volume service — the business starts from a structural disadvantage. The services section and business description also need keyword-optimised copy to signal relevance for specific search queries.</p>
+        <div class="fix">
+          <div class="fix-lbl">GBP optimisation checklist</div>
+          <ul>
+            <li><strong>Primary Category → must be set to: "Roofing Contractor"</strong> — verify this immediately</li>
+            <li>Additional categories to add: Siding Contractor, Gutters Contractor, Window Installation Service, General Contractor (5–6 max)</li>
+            <li>Services section: add each service with a keyword-rich description mentioning service type and target city names</li>
+            <li>Example: "Full residential roof replacement in Eagan, Apple Valley, Lakeville, and Bloomington. Free estimates. Storm and hail damage specialists."</li>
+            <li>Business description (750 chars max): primary keywords, all four cities served, key differentiators — financing, free estimates, 5-star rating — and a CTA</li>
+            <li>Verify all GBP attributes are completed: Licensed, Insured, Free estimates available, Financing available</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c17">
+      <div class="card-header" onclick="tog('c17')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">GBP service area configuration must include all four target cities</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">The GBP service area configuration tells Google which cities this business actively serves. Without explicit entries for Apple Valley, Lakeville, and Bloomington, Google will not surface this business in map pack results for searches originating from those locations. This is a 5-minute fix inside Google Business Profile settings.</p>
+        <div class="fix">
+          <div class="fix-lbl">Service area cities to add in GBP</div>
+          <ul>
+            <li>Eagan, MN — primary address, verify already set</li>
+            <li>Apple Valley, MN — add</li>
+            <li>Lakeville, MN — add</li>
+            <li>Bloomington, MN — add</li>
+            <li>Secondary buffer cities to add: Burnsville, Mendota Heights, Inver Grove Heights, Rosemount</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c18">
+      <div class="card-header" onclick="tog('c18')">
+        <span class="badge b-crit">🔴 Critical</span>
+        <div class="card-title">No "Areas We Serve" section on homepage or About page — missing on-site local signal</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">Google cross-references website content against GBP data to validate service area claims. If the website never mentions Apple Valley, Lakeville, or Bloomington, Google treats those GBP service area entries with less confidence. A dedicated "Areas We Serve" section on both the homepage and About page provides the on-site signal needed to reinforce multi-city GBP rankings.</p>
+        <div class="fix">
+          <div class="fix-lbl">How to implement this section</div>
+          <ul>
+            <li>Add a section to the homepage (between Services and Reviews) titled <strong>"Areas We Serve"</strong></li>
+            <li>Display each city with 1–2 sentences of genuine local context — not generic copy</li>
+            <li>Example: <em>"Apple Valley — We regularly complete roofing and siding projects for Apple Valley homeowners, just 6 miles south of our Eagan base. Free estimates available."</em></li>
+            <li>Each city name should link to its dedicated location landing page once that page is built</li>
+            <li>Add the same section to the About page with different wording to avoid duplicate content signals</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+  .footer {
+    background: var(--brand);
+    color: white;
+    padding: 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .footer::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .footer-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-brand .brand-name {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+  .footer-brand .brand-tagline {
+    font-size: 12px;
+    opacity: 0.45;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .footer-brand .brand-url {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 5px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .footer-brand .brand-url:hover {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.85);
+  }
+  .footer-meta {
+    text-align: right;
+  }
+  .footer-meta .meta-row {
+    font-size: 12px;
+    opacity: 0.4;
+    margin-bottom: 5px;
+    line-height: 1.5;
+  }
+  .footer-meta .meta-row:last-child { margin-bottom: 0; }
+  .footer-meta .meta-row strong {
+    opacity: 1;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+  }
+  .footer-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin: 28px auto 24px;
+    max-width: 880px;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-bottom {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-bottom .copy {
+    font-size: 11px;
+    opacity: 0.3;
+    letter-spacing: 0.04em;
+  }
+  .footer-bottom .badge-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .footer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  @media (max-width: 640px) {
+    .footer { padding: 32px 24px; }
+    .footer-meta { text-align: left; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="data:image/webp;base64,UklGRkYPAABXRUJQVlA4WAoAAAAQAAAALQEAOAAAQUxQSG4LAAANfyEQIBjw36wgInqAuRa83dq2rW2zbbOhoSZ6f7ck27JkOTi4tP//5x3s+7FuO9C4XyP6D8FtI0fS4WZTX5BdoavnCQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHi6XhQcjx9/fU4tTk9OV9iuv7+u/3aaLyJGk/4LfPVwMSdYnVwsHr/8zVT/a3P6LUCcrX8NgTh1GineN5tIcXdbIC4flvcH9ipEOGF05XFIU5Ihv4ZPbi9KkOX6Zjs392mE8+HlyzEK+fOMY67n8fVwyCeB4Jfw+vNyyNOT+5mZX3N6hsh9P9B3lcTVJrHZHuXh+6/gGqS5ft32VMOwb68Hl/d6s/16ESAu90DNrWfTxO16U37Tkaznf/4IkZ56W76OUZmLUZ5VV20f94jtY5B7nNwMbWExmP7v9xuuPywvO9z6/dfFi6cCOET/pYvrtxjYf7ieGGO3/1f3e7enffeex+79ftu8/pbVPN+7eFhFN25eXfW+Dv/o+Y4imbTKizeHvybqgb63HB+Uri5bm1x3bv+WnmdUtuejwBdXm9a5FoXCD7L1/Wwx553rP3042+yqp4D5jykohRuLzTRGJUFvrpJtXcq2v5A8+pR75+ni0B81D9KeOvfs01/jFdU4V09lS3iac7+8f5tHuER73fDH9q+o8P75v2miHtwCusjd8/z47/S6hfvmNqTWl5dtsK4RrXn7s7hWXZkFid6vI8bD4+zrgFtqHkD2eNoPKZqyXQ0zXX9pT7HX7LxNgvfZAi5eK60vnYhEPHE0BallpP2y+5vrV23AywofH3JBz+aIo26pu5obZmzPOwX7UK32kVjFZYRicQDeFoEpTVvHDkof+0TL4Z63gxbdq/XbhFE87yJZPF29HHwlPaQ8jzDfz1cpDjukAQkpyjs/43hdT9ypRU6JVHvbemDUOlXteNk1pwLi5mbmXVEqHxLl27blTeFs/bQ+4koJ00l69/NzisPAQ+FB8zM1MrafV0FTJ6eiyLUUUq+1R5up7RaESXjrq+Efza+ofPltRrD+sV53UPPE2H7frjs1m8vl6vflLhE6Se8H/voweCWzW7dKLgytxOqs/GwNMopqAlLuNcSQ4c3ppPQH27erwFQJz1c3lTYFoWHvGPufnWVqgw7bTtK5Wf/cbL72Bfe/tTK1p5ynfRjOuoK9DjBTx+lAlus+vJW9RWomjBGKuH80rWmfv/lyGhMhziH3IdGigPezEXu7vSsfr7qd/wjTd5kv4/0pUTTO6aDQFWyCeZ8l/1sR3jIDOjlhZYgiyS+IdzJ3TAExXv1AW0D+6Aze47u8jvUc3EowqVRrii8/d3gtdKkUZl1uMeB1trex7tk8A2F3H2MOsZ7GuEL49SLM0T1Mq5wqp1Ynq1U3/r7Ozgwj37GNHPKMWBqZIhfzvKbYfBkuhelsVIW3E5DgmjXL4djXTl9fNfvW39/XhcZuGAwuvfUsSUG3S696iC7SP7pz6WY5dHj/ltw+9EPldp+vqY4TWTNungBFqWcRMXZteE1ejEg8TxR1zJZtf9iMqZnNHN2ZdXP/nvfHkcH69lMneUqOakqpdr23Q6/UlVzVcVXVw6UwEN62tvR7ovgUWINPFwm8FvcxWdDxjlq2enp876MYPS2kbftbCRfBt6Ej/SHOp8NZGGHGS3UMbdTP3eQZx5+S9enT6iHp7ZhGK3IgCnXSdo2lwIpGzjLkNmkK29C8Dg4/5QUJMTMTzEgcB1bG/UyN49OmdzMl/C6G4ysjqTkdxfZI2s6mEqvKn+6ENdtIGurdyVQJ8eHxeCuJJc651dlwDG328YBf8UgwoxpPvbESKUN/2DGjcLI/Yc1TbnF31art8X3acmY5cUAhfZ4dc2Wmcw8/w1x7frkdcntgpfIta6zm79/uwtQxoOH9x/ohtsfw1FNdT72gM+DB5dGe6zdVgrVUHEi3BjO8Enr2zcXDMuhYPXfNdDjzOqlhZx/yJqnpvDk7CZp78PVds23zfd1JuMvxng1VD4uOqLW72YtZHz/8PbVsz6xSo4MVRSqFor8Nhvf103SSD+q+j7xJo0PXEoOMWUM9P128v3wZKLsy/2dBmAbkwfyJDbvY6xLP48FPEMntpDOuVFm/50oV0HZjoj/UxMxK20RKjvuyirrAfOtgrn5OY20THr3pIIeMmGjbbakJrHAytuzTwRSZrr/LSjZqMLxVKPpym04ZbXC9DneSZnP2iLhdePsbBC+VxplXwYj4s6cfpjs/7bZWNVyks2ycl5PG9RGeK8llgpXpNobWq6i9LuGy1DC8Z5gUzzbGLAtvojVl/qefnRV6wyoSPkC8PGXTe8z7w+ztOQvTSh7hgtBjrgxWQznQRR1JfjuoRbSd8hjsATm7PSzl7evAwBg/CgfXdO/ksJPQuJGnMS6NYn+0wfAO7q97w3Qh2W7c/RZu/NQau6hljtaSw9mpLKTK4svPZbd+PvBtolLTWOQGE3MUpvSzzK6IPAiTsvvP6VZFxO/U5JJuIIGqeb+ctqyMNa0ktdnifrOresIxrqRpLHKt/gZypIQZjF2ZXVlqyteoo/IipP22zogqai2Pt3dVkYR7BLOdIzr79lQE7dDPw/eAckpVFJF3IHHqsHT21oZVA90hbJkNNSGutbqA0QNt10yByLrKkl/M7lx1o/V0gPtfWKm2k2bCANooTBXQjq4eY0qYAVcGknBbaqy9Shj9cLjdTqblQhrYTm4D1wFf75OFtQtVHCNuhhkMbxe1AJfQFr+Fem0pGIaY82RKqoTHXmPcjjqQUCkjzaPtHyNvYiI/rY72F/p8qZ38OB1NUuR2E2yE/PpH82nHksm7Yb91+ZO7iPPf9R9sd571Lezrl5t+5+jRenefFpvLOOKPXPdthpm1uC7qf12+rr4uE/mfz/WgVl5Dk93TohvIfxzpa6Aep+SKkZtadZI4d31iGZQ/naErjpZAn4Oj26JFDP3RP06vuhfxLkc3h5xXwmd5VcGMevqpxW4o9F8XvL8c4ZOn65m+Lt3+7fFjZ9cip/g/Vz3FNNQ3UxNLbfeGy4YTotI5ctnFpSfuQZYDV3j5MpiE0y2mCvT507IEf7mqXe2t2gyn+qfPu9ZyjE9jIfcD0o+qA/YU8zAULMmXcZw5bs2xlzvjavZDb3/q7al82ZV4Os4NcN4e/qAVs3depDl5AAAAAAAAAAAAAAAAAAAAOIB/QwF5PF2eFCTrn6/7cX46lLq9E+yX+l3l1+tmaEoBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOD/xfYOVlA4ILIDAADwGwCdASouATkAPpFInEulpCKhopqqKLASCWQA0MpGfqv5AdyOMPxfJadKGUPYh+Z/kvUA8wDnIfyH0Afsb+qvvE/3b9bvcB+sHsAfsL1gH7d+wB+n3/09ln/n/uB8D37mfur7T3//1uvsPW8hT8ziJ23dI7Y5LdY27UvSZ+fFamLa/t9zQ7iP+nd3Rj+33NDuI/6d3dGP7fc0JJm78dCkiQwBSvtoOq64SFJSRT6z5JgAbu8zn2IOdV4hgC//gQk7OpCDzxbEBcvvTNy/pNIkTbnEf6encuwXW2XemjY7e5F9U8kMm7NoAP78rWB/+PlNXICqpUMp8ev4jn/SsdNbnOShgSvEaIoWR2bWlrfnv79eQCb+AHDBqpt4nyT6X6aFBwm3Ovb08keYq4BMByiXcJgINYauvevnN7A5kpSTm53Bnq1Nkcw7Og06Tht/BaJ/NS5rI/6SOl1o4eV03TV/YaadH/IMDQ1HvFyO5UnwNf+jB7zoPw//Gc550Kjc1v8AW1TKxRd3wCIOtB3NXAI3sCyBGq6PnALRRZ5wxWKqG/leF4k+kttmM7lfKXZv5tA6pGJ10fWsmdaoJ3hox1KnUBuIyoukAHpklfnzpS7+mRyg7s7AH/80mpzJp3+aTx9wLaMclFimGqhG8Qo9L49xKARC79skl0/yl9gu4U6Dg+JK5QOL/C1UGA2jbKnoPMsjbSLggN8iHKvi349PHQgfw6pEtvrPyo+q/EEUvk5G4BT5Kz4QPN4YgMCdMbbzfa6f/Hp1/hWJCjNcFrFS0XVuVkxuND8w0uATQn9tL//yDXh1Vt+oHzYI4eU3GEbfEsdQZtEmotcfUFO+NenytwwetawmnrQPbWNMqQjyl43cpefBMYt2mr/jA2/d9hjTspA/Z+tVqSvIQbx4DQViSmwmHIN+n1oX3YF9QCLPVQFQVJv+la4GctRz2bvoH+TMW9oiiU1ILWHilMlysWEDwUSBQ8Xgl/L/6jx/zLx/bc4EwpmbRA33z7e2yNwu0fF6x/Py3r0BdNsiRZefo45EWD6mKpdelsg6MIXhzSgcf+RJIJILGgcTi/DoAg8eUSNsXw5+CggZ5yhvGY517blE7M3dbZ2Zjfnm82yvJcb98FWw+u5nVoX3Ie7WT/Q68Q75Y7f/8mdH0QlXm3BpQRNrOeA8U/PrPCjKQ3Kyv6zDKjgzwlVVGXbySgcZy5ajYxCj9E4h2miCkhmo2cp8D9wxNZOv6FIwUCwNKbcUFwzP48EbEQAA" alt="Intrycks logo" style="height:38px; width:auto; margin-bottom:10px; display:block;">
+      <div class="brand-tagline">Digital Growth Agency</div>
+      <a href="https://intrycks.com" target="_blank" class="brand-url">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="opacity:0.6"><path d="M10 2L2 10M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        intrycks.com
+      </a>
+    </div>
+    <div class="footer-meta">
+      <div class="meta-row"><strong>Prepared for</strong> &nbsp; Renewed Exterior Systems</div>
+      <div class="meta-row"><strong>Report type</strong> &nbsp; SEO Site Audit</div>
+      <div class="meta-row"><strong>Prepared by</strong> &nbsp; Intrycks SEO Team</div>
+      <div class="meta-row"><strong>Date</strong> &nbsp; March 2026</div>
+
+    </div>
+  </div>
+  <hr class="footer-divider">
+  <div class="footer-bottom">
+    <span class="copy">© 2026 Intrycks. All rights reserved. This report is confidential and prepared exclusively for the client named above.</span>
+
+  </div>
+</div>
+
+<script>
+  function tog(id) { document.getElementById(id).classList.toggle('open'); }
+  document.querySelectorAll('.fill').forEach(el => {
+    const w = el.dataset.w;
+    el.style.width = '0%';
+    setTimeout(() => { el.style.width = w + '%'; }, 200);
+  });
+</script>
+</body>
+</html>
